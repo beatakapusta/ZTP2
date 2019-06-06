@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ 'title.recipe_list'|trans }}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ 'title.recipe_list'|trans }}</h1>
+    {% if pagination is defined and pagination|length %}
+
+        <div class="navigation text-center">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>{{ knp_pagination_sortable(pagination, 'label.idrecipes'|trans, 'r.id') }}</th>
+                <th>{{ knp_pagination_sortable(pagination, 'label.name'|trans, 'r.name') }}</th>
+                <th>{{ 'label.recipe'|trans }}</th>
+                <th>{{ 'label.actions'|trans }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for recipe in pagination %}
+                <tr>
+                    <td>{{ recipe.id }}</td>
+                    <td>{{ recipe.name }}</td>
+                    <td>{{ recipe.text }}</td>
+                    <td>
+                        <a href="{{ url('recipe_view', {id: recipe.id}) }}" title="{{ 'action.view'|trans }}">
+                            {{ 'action.view'|trans }}
+                        </a>
+                        <a href="{{ url('recipe_edit', {id: recipe.id}) }}" title="{{ 'action.edit'|trans }}">
+                            {{ 'action.edit'|trans }}
+                        </a>
+                        <a href="{{ url('recipe_delete', {id: recipe.id}) }}" title="{{ 'action.delete'|trans }}">
+                            {{ 'action.delete'|trans }}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+
+
+        </table>
+        <button type="button" class="btn"><a href="{{ url('recipe_new')}}" title="{{ 'action.new'|trans }}">
+                {{ 'action.new'|trans }}
+            </a></button>
+        <div class="navigation text-center">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+
+    {% else %}
+        <p>
+            {% include 'default/_single_flash_message.html.twig' with {
+                type: 'warning',
+                message: 'message.empty_list'|trans
+            } %}
+        </p>
+        <button type="button" class="btn"><a href="{{ url('recipe_new')}}" title="{{ 'action.new'|trans }}">
+                {{ 'action.new'|trans }}
+            </a></button>
+    {% endif %}
+
+{% endblock %}

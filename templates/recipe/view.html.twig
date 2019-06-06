@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ 'title.recipe_list'|trans({'%id%': recipe.id|default('')}) }}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ 'label.recipe'|trans({'%id%': recipe.id|default('')}) }}</h1>
+    {% if recipe is defined and recipe|length %}
+        <a href="{{ url('recipe_edit', {id: recipe.id}) }}" title="{{ 'action.edit'|trans }}">
+            {{ 'action.edit'|trans }}
+        </a>
+        <a href="{{ url('recipe_delete', {id: recipe.id}) }}" title="{{ 'action.delete'|trans }}">
+            {{ 'action.delete'|trans }}
+        </a>
+        <dl class="dl-horizontal">
+            <dt>{{ 'label.idrecipes'|trans }}</dt>
+            <dd>{{ recipe.id }}</dd>
+            <dt>{{ 'label.name'|trans }}</dt>
+            <dd>{{  recipe.name }}</dd>
+        </dl>
+        <h2>{{ 'label.text' |trans }}</h2>
+        <p>{{ recipe.text }}</p>
+        <button type="button" class="btn"><a href="{{ url('recipe_index')}}" title="{{ 'action.back_to_list'|trans }}">
+                {{ 'action.back_to_list'|trans }}
+            </a></button>
+    {% else %}
+        <p>
+            {{ 'message.item_not_found'|trans }}
+        </p>
+    {% endif %}
+{% endblock %}
