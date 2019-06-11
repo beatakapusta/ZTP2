@@ -115,4 +115,31 @@ class Photo
 
         return $this;
     }
+
+    /**
+     * @see \Serializable::serialize()
+     *
+     * @return string Serialized object
+     */
+    public function serialize(): string
+    {
+        $file = $this->getPhoto();
+
+        return serialize(
+            [
+                $this->id,
+                ($file instanceof Photo ) ? $file->getPhoto() : $file,
+            ]
+        );
+    }
+
+    /**
+     * @see \Serializable::unserialize()
+     *
+     * @param string $serialized Serialized object
+     */
+    public function unserialize($serialized): void
+    {
+        list($this->id) = unserialize($serialized);
+    }
 }

@@ -99,6 +99,9 @@ class RecipeController extends AbstractController
 //            $photo->setRecipe($repository->findOneBy(['id' => 4]));
 //
 //            $recipe->setPhoto($photo);
+              $photo = $recipe->getPhoto();
+              $photo->setRecipe($recipe);
+
               $repository->save($recipe);
 //
 //            $photoRepository->save($photo);

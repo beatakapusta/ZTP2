@@ -54,6 +54,7 @@ class RecipeType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $photo = $builder->getData();
 
         $builder->add(
             'name',
@@ -91,7 +92,7 @@ class RecipeType extends AbstractType
             PhotoType::class,
             [
                 'label' => false
-////                'data_class' => null,
+////               'data_class' => null,
 //                'mapped' => true,
             ]
         );
@@ -108,6 +109,9 @@ class RecipeType extends AbstractType
         $builder->get('tags')->addModelTransformer(
             $this->tagsDataTransformer
         );
+
+        $builder->addEventSubscriber(new DefaultPhotoFileEventSubscriber());
+
 
 
     }

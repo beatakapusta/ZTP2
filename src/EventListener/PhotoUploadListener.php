@@ -62,6 +62,9 @@ class PhotoUploadListener
         $this->uploadFile($entity);
     }
 
+    /**
+     * @param LifecycleEventArgs $args
+     */
     public function postLoad(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();
@@ -78,6 +81,7 @@ class PhotoUploadListener
             );
         }
     }
+
 
     /**
      * Upload file.

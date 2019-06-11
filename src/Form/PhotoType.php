@@ -30,7 +30,6 @@ class PhotoType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $photo = $builder->getData();
 
         //dump($photo);
 
@@ -42,8 +41,6 @@ class PhotoType extends AbstractType
                 'required' => isset($photo) && $photo->getPhoto() ? false : true,
             ]
         );
-
-        $builder->addEventSubscriber(new DefaultPhotoFileEventSubscriber());
 
     }
 
