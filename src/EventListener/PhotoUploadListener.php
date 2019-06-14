@@ -102,4 +102,33 @@ class PhotoUploadListener
             $entity->setPhoto($filename);
         }
     }
+
+    /**
+     * Pre remove.
+     *
+     * @param \Doctrine\ORM\Event\LifecycleEventArgs $args
+     */
+    public function preRemove(LifecycleEventArgs $args)
+    {
+        $entity = $args->getEntity();
+
+        $this->removePhoto($entity);
+    }
+// ...
+    /**
+     * Remove file from disk.
+     *
+     * @param \App\Entity\Photo $entity Photo entity
+     */
+    private function removePhoto($entity): void
+    {
+        if (!$entity instanceof Photo) {
+            return;
+        }
+
+        $file = $entity->getPhoto();
+        if ($file instanceof File) {
+            $this->filesystem->remove($file->getPathname());
+        }
+    }
 }

@@ -38,7 +38,6 @@ class PhotoType extends AbstractType
             FileType::class,
             [
                 'label' => 'label.photo',
-                'required' => isset($photo) && $photo->getPhoto() ? false : true,
             ]
         );
 

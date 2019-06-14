@@ -1,10 +1,25 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_recipe.html.twig' %}
 
 {% block title %}
     {{ 'title.recipe_list'|trans({'%id%': recipe.id|default('')}) }}
 {% endblock %}
 
 {% block body %}
+    {% if recipe.photo.photo is defined and recipe.photo.photo|length %}
+        <section id="recipe-image" style="background: url({{ asset('uploads/photos/'~recipe.photo.photo) }});">
+            <div class="welcome-bg">
+                <div class="container">
+                    <h1>{{  recipe.name }}</h1>
+                </div>
+            </div>
+        </section>
+    {% else %}
+        {% include 'default/_single_flash_message.html.twig' with {
+            type: 'warning',
+            message: 'message.item_not_found'|trans
+        } %}
+    {% endif %}
+
     <h1>{{ 'label.recipe'|trans({'%id%': recipe.id|default('')}) }}</h1>
     {% if recipe is defined and recipe|length %}
         <a href="{{ url('recipe_edit', {id: recipe.id}) }}" title="{{ 'action.edit'|trans }}">
@@ -19,6 +34,7 @@
             <dt>{{ 'label.name'|trans }}</dt>
             <dd>{{  recipe.name }}</dd>
         </dl>
+        <img src="{{ asset('uploads/photos/'~ recipe.photo.photo) }}" alt="">
         <h2>{{ 'label.text' |trans }}</h2>
         <p>{{ recipe.text }}</p>
         <button type="button" class="btn"><a href="{{ url('recipe_index')}}" title="{{ 'action.back_to_list'|trans }}">

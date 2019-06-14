@@ -91,21 +91,23 @@ class RecipeType extends AbstractType
             'photo',
             PhotoType::class,
             [
-                'label' => false
+                'label' => false,
+                'required' => isset($photo) && $photo->getPhoto() ? false : true,
+
 ////               'data_class' => null,
-//                'mapped' => true,
+                'mapped' => true,
             ]
         );
-/**
+
         $builder->add(
-            'ingredient',
+            'RecipeIngredient',
             CollectionType::class,
             [
                 'entry_type' => RecipeIngredientType::class,
                 'entry_options' => ['label' => false],
             ]
         );
-**/
+
         $builder->get('tags')->addModelTransformer(
             $this->tagsDataTransformer
         );

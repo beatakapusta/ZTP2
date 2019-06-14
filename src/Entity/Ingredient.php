@@ -95,7 +95,7 @@ class Ingredient
     /**
      * @return Collection
      */
-    public function getIngredient_recipe(): Collection
+    public function getIngredientRecipe(): Collection
     {
         return $this->ingredient_recipe;
     }
@@ -104,7 +104,7 @@ class Ingredient
      * @param RecipeIngredient $ingredient_recipe
      * @return Ingredient
      */
-    public function addIngredient_recipe(RecipeIngredient $ingredient_recipe): self
+    public function addIngredientRecipe(RecipeIngredient $ingredient_recipe): self
     {
         if (!$this->ingredient_recipe->contains($ingredient_recipe)) {
             $this->ingredient_recipe[] = $ingredient_recipe;
@@ -117,7 +117,7 @@ class Ingredient
      * @param RecipeIngredient $ingredient_recipe
      * @return Ingredient
      */
-    public function removeIngredient_recipe(RecipeIngredient $ingredient_recipe): self
+    public function removeIngredientRecipe(RecipeIngredient $ingredient_recipe): self
     {
         if ($this->ingredient_recipe->contains($ingredient_recipe)) {
             $this->ingredient_recipe->removeElement($ingredient_recipe);

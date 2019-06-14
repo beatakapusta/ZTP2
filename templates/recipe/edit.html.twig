@@ -6,8 +6,10 @@
 
 {% block body %}
     <h1>{{ 'title.recipe_edit'|trans({'%id%': recipe.id|default('')}) }}</h1>
+
     {{ form_start(form, { method: 'PUT', action: url('recipe_edit', {id: recipe.id}) }) }}
     {{ form_widget(form) }}
+
     <div class="form-group row float-sm-right">
         <input type="submit" value="{{ 'action.save'|trans }}" class="btn btn-primary" />
     </div>

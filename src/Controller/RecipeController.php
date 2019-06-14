@@ -84,27 +84,18 @@ class RecipeController extends AbstractController
      *     name="recipe_new",
      * )
      */
-    public function new(Request $request, RecipeRepository $repository, PhotoRepository $photoRepository): Response
+    public function new(Request $request, RecipeRepository $repository): Response
     {
         $recipe = new Recipe();
         $form = $this->createForm(RecipeType::class, $recipe);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-           // dump($recipe);
-//            die();
-            //$photoData = $form -> get('photo') -> getData();
-//            $photo = new Photo();
-//            $photo->setPhoto($photoData);
-//            $photo->setRecipe($repository->findOneBy(['id' => 4]));
-//
-//            $recipe->setPhoto($photo);
-              $photo = $recipe->getPhoto();
+            dump($recipe);
+            die();
+            $photo = $recipe->getPhoto();
               $photo->setRecipe($recipe);
 
               $repository->save($recipe);
-//
-//            $photoRepository->save($photo);
               return $this->redirectToRoute('recipe_index');
         }
         return $this->render(

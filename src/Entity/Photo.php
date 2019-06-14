@@ -7,6 +7,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -27,7 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     fields={"photo"}
  * )
  */
-class Photo
+class Photo implements \Serializable
 {
     /**
      * Primary key.
@@ -128,7 +129,7 @@ class Photo
         return serialize(
             [
                 $this->id,
-                ($file instanceof Photo ) ? $file->getPhoto() : $file,
+                ($file instanceof File ) ? $file->getPhoto() : $file,
             ]
         );
     }
