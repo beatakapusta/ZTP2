@@ -1,8 +1,37 @@
-{% include 'default/_form.html.twig' with {
-    page_title: 'title.recipe_new',
-    attr: {
-        method: 'POST',
-        action: url('recipe_new')
-    },
-    back_to_list_path: 'recipe_index',
-} %}
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ 'title.recipe_new'|trans}}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ 'title.recipe_new'|trans }}</h1>
+
+    {{ form_start(form, { method: 'POST', action: url('recipe_new') })}}
+    {# render the task's only field: description #}
+    {{ form_row(form.name) }}
+    {{ form_row(form.text) }}
+    {{ form_row(form.tags) }}
+    <ul class="ingredients" data-prototype="{{ form_widget(form.RecipeIngredients.vars.prototype)|e('html_attr')  }} ">
+        {# iterate over each existing tag and render its only field: name #}
+        {% for RecipeIngredient in form.RecipeIngredients %}
+                <li>
+                    {{ form_row(RecipeIngredient.amount) }}
+                </li>
+                <li>
+                    {{ form_row(RecipeIngredient.Ingredient) }}
+                </li>
+        {% endfor %}
+    </ul>
+    {{ form_row(form.photo) }}
+
+    <div class="form-group row float-sm-right">
+        <input type="submit" value="{{ 'action.save'|trans }}" class="btn btn-primary" />
+    </div>
+    <div class="form-group row float-sm-left">
+        <a href="{{ url('recipe_index') }}" class="btn btn-link">
+            {{ 'action.back_to_list'|trans }}
+        </a>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}

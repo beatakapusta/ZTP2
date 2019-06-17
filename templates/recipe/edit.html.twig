@@ -8,7 +8,21 @@
     <h1>{{ 'title.recipe_edit'|trans({'%id%': recipe.id|default('')}) }}</h1>
 
     {{ form_start(form, { method: 'PUT', action: url('recipe_edit', {id: recipe.id}) }) }}
-    {{ form_widget(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.text) }}
+    {{ form_row(form.tags) }}
+    <ul class="ingredients" data-prototype="{{ form_widget(form.RecipeIngredients.vars.prototype)|e('html_attr')  }} ">
+        {# iterate over each existing tag and render its only field: name #}
+        {% for RecipeIngredient in form.RecipeIngredients %}
+                <li>
+                    {{ form_row(RecipeIngredient.amount) }}
+                </li>
+                <li>
+                    {{ form_row(RecipeIngredient.Ingredient) }}
+                </li>
+        {% endfor %}
+    </ul>
+    {{ form_row(form.photo) }}
 
     <div class="form-group row float-sm-right">
         <input type="submit" value="{{ 'action.save'|trans }}" class="btn btn-primary" />

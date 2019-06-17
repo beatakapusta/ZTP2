@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Form\RecipeIngredientType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -65,9 +66,9 @@ class Recipe
     private $tags;
 
     /**
-     * @ORM\OneToMany(targetEntity="RecipeIngredient", mappedBy="recipe", fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="RecipeIngredient", mappedBy="recipe", fetch="EXTRA_LAZY", cascade={"persist"})
      */
-    private $recipe_ingredient;
+    private $recipeIngredients;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Photo", mappedBy="recipe", cascade={"persist", "remove"})
@@ -77,6 +78,7 @@ class Recipe
     public function __construct()
     {
         $this->tags = new ArrayCollection();
+        $this->recipeIngredients = new ArrayCollection();
     }
 
 
@@ -155,19 +157,19 @@ class Recipe
     /**
      * @return Collection
      */
-    public function getRecipeIngredient(): ?Collection
+    public function getRecipeIngredients(): ?Collection
     {
-        return $this->recipe_ingredient;
+        return $this->recipeIngredients;
     }
 
     /**
      * @param RecipeIngredient $recipe_ingredient
      * @return Recipe
      */
-    public function addRecipeIngredient(RecipeIngredient $recipe_ingredient): self
+    public function addRecipeIngredients(RecipeIngredient $recipeIngredients): self
     {
-        if (!$this->recipe_ingredient->contains($recipe_ingredient)) {
-            $this->recipe_ingredient[] = $recipe_ingredient;
+        if (!$this->recipeIngredients->contains($recipeIngredients)) {
+            $this->recipeIngredient[] = $recipeIngredients;
         }
 
         return $this;
@@ -177,10 +179,10 @@ class Recipe
      * @param RecipeIngredient $recipe_ingredient
      * @return Recipe
      */
-    public function removeRecipeIngredient(RecipeIngredient $recipe_ingredient): self
+    public function removeRecipeIngredients(RecipeIngredient $recipeIngredients): self
     {
-        if ($this->recipe_ingredient->contains($recipe_ingredient)) {
-            $this->recipe_ingredient->removeElement($recipe_ingredient);
+        if ($this->recipeIngredients->contains($recipeIngredients)) {
+            $this->recipeIngredients->removeElement($recipeIngredients);
         }
 
         return $this;

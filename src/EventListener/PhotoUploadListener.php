@@ -11,6 +11,8 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Class PhotoUploadListener.
@@ -23,15 +25,20 @@ class PhotoUploadListener
      * @var \App\Service\FileUploader|null
      */
     protected $uploaderService = null;
+    /**
+     * @var \Symfony\Component\Filesystem\
+     */
+    protected $filesystem = null;
 
     /**
      * PhotoUploadListener constructor.
-     *
-     * @param \App\Service\FileUploader $fileUploader File uploader service
+     * @param FileUploader $fileUploader
+     * @param Filesystem $filesystem
      */
-    public function __construct(FileUploader $fileUploader)
+    public function __construct(FileUploader $fileUploader, Filesystem $filesystem)
     {
         $this->uploaderService = $fileUploader;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -100,6 +107,8 @@ class PhotoUploadListener
         if ($file instanceof UploadedFile) {
             $filename = $this->uploaderService->upload($file);
             $entity->setPhoto($filename);
+        } else if ($file instanceof File) {
+            $entity->setPhoto($file->getFilename());
         }
     }
 

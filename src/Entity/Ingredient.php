@@ -42,9 +42,9 @@ class Ingredient
     private $code;
 
     /**
-     * @ORM\OneToMany(targetEntity="RecipeIngredient", mappedBy="ingredient")
+     * @ORM\OneToMany(targetEntity="RecipeIngredient", mappedBy="ingredient", cascade={"persist"})
      */
-    private $ingredient_recipe;
+    private $ingredientRecipe;
 
     /**
      * @return int|null
@@ -97,17 +97,17 @@ class Ingredient
      */
     public function getIngredientRecipe(): Collection
     {
-        return $this->ingredient_recipe;
+        return $this->ingredientRecipe;
     }
 
     /**
      * @param RecipeIngredient $ingredient_recipe
      * @return Ingredient
      */
-    public function addIngredientRecipe(RecipeIngredient $ingredient_recipe): self
+    public function addIngredientRecipe(RecipeIngredient $ingredientRecipe): self
     {
-        if (!$this->ingredient_recipe->contains($ingredient_recipe)) {
-            $this->ingredient_recipe[] = $ingredient_recipe;
+        if (!$this->ingredientRecipe->contains($ingredientRecipe)) {
+            $this->ingredientRecipe[] = $ingredientRecipe;
         }
 
         return $this;
@@ -117,12 +117,20 @@ class Ingredient
      * @param RecipeIngredient $ingredient_recipe
      * @return Ingredient
      */
-    public function removeIngredientRecipe(RecipeIngredient $ingredient_recipe): self
+    public function removeIngredientRecipe(RecipeIngredient $ingredientRecipe): self
     {
-        if ($this->ingredient_recipe->contains($ingredient_recipe)) {
-            $this->ingredient_recipe->removeElement($ingredient_recipe);
+        if ($this->ingredientRecipe->contains($ingredientRecipe)) {
+            $this->ingredientRecipe->removeElement($ingredientRecipe);
         }
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function __toString()
+    {
+        return $this->getName();
     }
 }

@@ -7,6 +7,7 @@ namespace App\Form;
 use App\Entity\Recipe;
 use App\Entity\RecipeIngredient;
 use App\Entity\Tag;
+use App\Form\DataTransformer\IngredientDataTransformer;
 use App\Form\DataTransformer\TagsDataTransformer;
 use App\Form\EventListener\DefaultPhotoFileEventSubscriber;
 use phpDocumentor\Reflection\DocBlock\Type\Collection;
@@ -23,6 +24,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class RecipeType extends AbstractType
 {
+    /**
+     * Ingredients data transformer.
+     *
+     * @var \App\Form\DataTransformer\IngredientDataTransformer|null
+     */
+    private $ingredientDataTransformer = null;
 
     /**
      * Tags data transformer.
@@ -36,9 +43,11 @@ class RecipeType extends AbstractType
      *
      * @param \App\Form\DataTransformer\TagsDataTransformer $tagsDataTransformer Tags data transformer
      */
-    public function __construct(TagsDataTransformer $tagsDataTransformer)
+    public function __construct(TagsDataTransformer $tagsDataTransformer, IngredientDataTransformer $ingredientDataTransformer)
     {
         $this->tagsDataTransformer = $tagsDataTransformer;
+        $this->ingredientDataTransformer = $ingredientDataTransformer;
+
     }
 
     /**
@@ -88,28 +97,33 @@ class RecipeType extends AbstractType
         );
 
         $builder->add(
+            'RecipeIngredients',
+            CollectionType::class,
+            [
+                'entry_type' => RecipeIngredientType::class,
+                'allow_add' => true,
+                'by_reference' => false,
+                'allow_delete' => true,
+            ]
+        );
+
+        $builder->add(
             'photo',
             PhotoType::class,
             [
                 'label' => false,
                 'required' => isset($photo) && $photo->getPhoto() ? false : true,
-
-////               'data_class' => null,
                 'mapped' => true,
             ]
         );
 
-        $builder->add(
-            'RecipeIngredient',
-            CollectionType::class,
-            [
-                'entry_type' => RecipeIngredientType::class,
-                'entry_options' => ['label' => false],
-            ]
-        );
 
         $builder->get('tags')->addModelTransformer(
             $this->tagsDataTransformer
+        );
+
+        $builder->get('RecipeIngredients')->addModelTransformer(
+            $this->ingredientDataTransformer
         );
 
         $builder->addEventSubscriber(new DefaultPhotoFileEventSubscriber());

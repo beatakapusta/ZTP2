@@ -74,6 +74,22 @@
                 <source>label.photo</source>
                 <target>Zdjęcie</target>
             </trans-unit>
+            <trans-unit id="Recipe ingredient">
+                <source>Recipe ingredient</source>
+                <target>Składniki</target>
+            </trans-unit>
+            <trans-unit id="label.ingredient">
+                <source>label.ingredient</source>
+                <target>Składnik</target>
+            </trans-unit>
+            <trans-unit id="Amount">
+                <source>Amount</source>
+                <target>Ilość</target>
+            </trans-unit>
+            <trans-unit id="label.amount">
+                <source>label.amount</source>
+                <target>Ilość</target>
+            </trans-unit>
 
             <!-- PRZEPISY-->
             <trans-unit id="label.idrecipes">

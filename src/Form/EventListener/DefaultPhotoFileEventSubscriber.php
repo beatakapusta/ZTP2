@@ -48,8 +48,9 @@ class DefaultPhotoFileEventSubscriber implements EventSubscriberInterface
     {
         $form = $event->getForm();
         $data = $event->getData();
-        if (null == $data['photo']) {
-            $data['photo'] = ($form->getData())->getPhoto();
+        if (isset($data['photo']) && null == $data['photo']['photo']) {
+            $photo = ($form->getData())->getPhoto();
+            $data['photo']['photo'] = $photo->getPhoto();
             $event->setData($data);
         }
     }

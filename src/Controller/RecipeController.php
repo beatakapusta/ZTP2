@@ -10,7 +10,9 @@ use App\Repository\PhotoRepository;
 use App\Repository\RecipeRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -90,13 +92,12 @@ class RecipeController extends AbstractController
         $form = $this->createForm(RecipeType::class, $recipe);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            dump($recipe);
-            die();
-            $photo = $recipe->getPhoto();
-              $photo->setRecipe($recipe);
 
-              $repository->save($recipe);
-              return $this->redirectToRoute('recipe_index');
+            $photo = $recipe->getPhoto();
+            $photo->setRecipe($recipe);
+
+            $repository->save($recipe);
+            return $this->redirectToRoute('recipe_index');
         }
         return $this->render(
             'recipe/new.html.twig',
@@ -122,17 +123,26 @@ class RecipeController extends AbstractController
      *     name="recipe_edit",
      * )
      */
-    public function edit(Request $request, Recipe $recipe, RecipeRepository $repository): Response
+    public function edit(Request $request, Recipe $recipe, RecipeRepository $repository, Filesystem $filesystem): Response
     {
-        //dump($recipe->getPhoto());
+
+        $photo = $recipe->getPhoto();
+
+        $originalPhoto = clone $photo;
 
         $form = $this->createForm(RecipeType::class, $recipe, ['method' => 'PUT']);
+
         $form->handleRequest($request);
 
 
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $formData = $form->getData();
+            if ($formData->getPhoto() instanceof UploadedFile) {
+                $file = $originalPhoto->getPhoto();
+                $filesystem->remove($file->getPathname());
+            }
 
             $repository->save($recipe);
 
@@ -155,7 +165,7 @@ class RecipeController extends AbstractController
      * @param \Symfony\Component\HttpFoundation\Request $request    HTTP request
      * @param \App\Entity\Recipe                       $recipe       Recipe entity
      * @param \App\Repository\RecipeRepository            $repository  repository
-     *
+     * @param \Symfony\Component\Filesystem\Filesystem  $filesystem Filesystem component
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      *
      * @throws \Doctrine\ORM\ORMException

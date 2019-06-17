@@ -7,52 +7,57 @@ namespace App\Form;
 
 use App\Entity\RecipeIngredient;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
-* Class RecipeIngredientType.
-*/
+ * Class RecipeIngredientType
+ * @package App\Form
+ */
 class RecipeIngredientType extends AbstractType
 {
-    /**
-    * Builds the form.
-    *
-    * This method is called for each type in the hierarchy starting from the
-    * top most type. Type extensions can further modify the form.
-    *
-    * @see FormTypeExtensionInterface::buildForm()
-    *
-    * @param FormBuilderInterface $builder The form builder
-    * @param array                $options The options
-    */
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('amount');
+        $builder->add(
+            'amount',
+            ChoiceType::class,
+            [
+                'label' => 'label.amount',
+                'choices'  => [
+                    '1' => '1',
+                    '2' => '2',
+                    '3' => '3',
+                ],
+            ]
+        );
+
+        $builder->add(
+            'Ingredient',
+            IngredientType::class,
+                [
+                    'label' => false
+                ]
+        );
+/**
+        $builder->add(
+            'Ingredient',
+            CollectionType::class,
+            [
+                'entry_type' => IngredientType::class,
+                'allow_add' => true,
+                'by_reference' => false,
+                'allow_delete' => true,
+            ]
+        );
+ **/
     }
 
-    /**
-    * Configures the options for this type.
-    *
-    * @param OptionsResolver $resolver The resolver for the options
-    */
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(['data_class' => RecipeIngredient::class]);
-    }
-
-    /**
-    * Returns the prefix of the template block name for this type.
-    *
-    * The block prefix defaults to the underscored short class name with
-    * the "Type" suffix removed (e.g. "UserProfileType" => "user_profile").
-    *
-    * @return string The prefix of the template block name
-    */
-
-    public function getBlockPrefix(): string
-    {
-        return 'amount';
+        $resolver->setDefaults([
+            'data_class' => RecipeIngredient::class,
+        ]);
     }
 }
