@@ -44,18 +44,20 @@ class IngredientDataTransformer implements DataTransformerInterface
      */
     public function transform($ingredients)
     {
-//        dump($ingredients);
-//        if (null == $ingredients) {
-//            return '';
-//        }
-//
+        //dump($ingredients);
+        if (null == $ingredients) {
+            return "";
+      }
+
         $ingredientNames = [];
         foreach ($ingredients as $ingredient) {
             $ingredientNames[] = $ingredient->getName();
-        }
+            }
 
-        return $ingredients;
+        return $ingredient->getName();
     }
+
+
 
     /**
      * Transform string of ingredient names into array of ingredient entities.
@@ -94,6 +96,7 @@ class IngredientDataTransformer implements DataTransformerInterface
 
                 $amount = $collection->getAmount($collection);
                 $recipeIngredient = $this->repository->findOneByAmount(strtolower($amount));
+
                 if (null == $recipeIngredient) {
                     $recipeIngredientNew = new RecipeIngredient(1);
                     $recipeIngredientNew->setAmount($amount);

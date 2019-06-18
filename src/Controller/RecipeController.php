@@ -92,6 +92,7 @@ class RecipeController extends AbstractController
         $form = $this->createForm(RecipeType::class, $recipe);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            dump($recipe);
 
             $photo = $recipe->getPhoto();
             $photo->setRecipe($recipe);

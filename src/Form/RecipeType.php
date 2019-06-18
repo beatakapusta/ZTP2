@@ -10,6 +10,8 @@ use App\Entity\Tag;
 use App\Form\DataTransformer\IngredientDataTransformer;
 use App\Form\DataTransformer\TagsDataTransformer;
 use App\Form\EventListener\DefaultPhotoFileEventSubscriber;
+use App\Form\EventListener\RecipeIngredientEventSubscriber;
+use App\Repository\RecipeIngredientRepository;
 use phpDocumentor\Reflection\DocBlock\Type\Collection;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -104,6 +106,7 @@ class RecipeType extends AbstractType
                 'allow_add' => true,
                 'by_reference' => false,
                 'allow_delete' => true,
+                'mapped' => false,
             ]
         );
 
@@ -127,6 +130,8 @@ class RecipeType extends AbstractType
         );
 
         $builder->addEventSubscriber(new DefaultPhotoFileEventSubscriber());
+
+        $builder->addEventSubscriber(new RecipeIngredientEventSubscriber());
 
 
 
