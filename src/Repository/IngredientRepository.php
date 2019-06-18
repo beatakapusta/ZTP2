@@ -65,6 +65,7 @@ class IngredientRepository extends ServiceEntityRepository
         $this->_em->remove($ingredient);
         $this->_em->flush($ingredient);
     }
+
     // /**
     //  * @return Ingredient[] Returns an array of Ingredient objects
     //  */

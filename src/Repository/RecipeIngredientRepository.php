@@ -47,10 +47,10 @@ class RecipeIngredientRepository extends ServiceEntityRepository
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function save(RecipeIngredient $recipe_ingredient): void
+    public function save(RecipeIngredient $recipeIngredient): void
     {
-        $this->_em->persist($recipe_ingredient);
-        $this->_em->flush($recipe_ingredient);
+        $this->_em->persist($recipeIngredient);
+        $this->_em->flush($recipeIngredient);
     }
     /**
      * Delete record.
@@ -60,10 +60,10 @@ class RecipeIngredientRepository extends ServiceEntityRepository
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function delete(RecipeIngredient $recipe_ingredient): void
+    public function delete(RecipeIngredient $recipeIngredient): void
     {
-        $this->_em->remove($recipe_ingredient);
-        $this->_em->flush($recipe_ingredient);
+        $this->_em->remove($recipeIngredient);
+        $this->_em->flush($recipeIngredient);
     }
     // /**
     //  * @return RecipeIngredient[] Returns an array of RecipeIngredient objects
