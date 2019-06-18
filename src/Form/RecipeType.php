@@ -116,7 +116,6 @@ class RecipeType extends AbstractType
             [
                 'label' => false,
                 'required' => isset($photo) && $photo->getPhoto() ? false : true,
-                'mapped' => true,
             ]
         );
 
