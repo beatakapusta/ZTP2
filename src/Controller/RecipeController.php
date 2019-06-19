@@ -97,7 +97,10 @@ class RecipeController extends AbstractController
             $photo = $recipe->getPhoto();
             $photo->setRecipe($recipe);
 
+            $recipeIngredients = $recipe->getRecipeIngredients();
+
             $repository->save($recipe);
+
             return $this->redirectToRoute('recipe_index');
         }
         return $this->render(

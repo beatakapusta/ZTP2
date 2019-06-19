@@ -25,12 +25,12 @@ class RecipeIngredient
 
     /**
      * @ORM\ManyToOne(targetEntity="Recipe", inversedBy="recipeIngredients")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false)q1
      */
     private $recipe;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Ingredient", inversedBy="ingredientRecipe")
+     * @ORM\ManyToOne(targetEntity="Ingredient", inversedBy="ingredientRecipe", cascade={"persist"}))
      * @ORM\JoinColumn(nullable=false)
      */
     private $ingredient;
@@ -67,7 +67,7 @@ class RecipeIngredient
      */
     public function getRecipe()
     {
-        return $this->amount;
+        return $this->recipe;
     }
 
     /**

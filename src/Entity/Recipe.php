@@ -75,6 +75,9 @@ class Recipe
      */
     private $photo;
 
+    /**
+     * Recipe constructor.
+     */
     public function __construct()
     {
         $this->tags = new ArrayCollection();
@@ -166,12 +169,11 @@ class Recipe
      * @param RecipeIngredient $recipe_ingredient
      * @return Recipe
      */
-    public function addRecipeIngredients(RecipeIngredient $recipeIngredients): self
+    public function addRecipeIngredient(RecipeIngredient $recipeIngredient): self
     {
-        if (!$this->recipeIngredients->contains($recipeIngredients)) {
-            $this->recipeIngredient[] = $recipeIngredients;
+        if (!$this->recipeIngredients->contains($recipeIngredient)) {
+            $this->recipeIngredients[] = $recipeIngredient;
         }
-
         return $this;
     }
 
@@ -179,10 +181,10 @@ class Recipe
      * @param RecipeIngredient $recipe_ingredient
      * @return Recipe
      */
-    public function removeRecipeIngredients(RecipeIngredient $recipeIngredients): self
+    public function removeRecipeIngredient(RecipeIngredient $recipeIngredient): self
     {
-        if ($this->recipeIngredients->contains($recipeIngredients)) {
-            $this->recipeIngredients->removeElement($recipeIngredients);
+        if ($this->recipeIngredients->contains($recipeIngredient)) {
+            $this->recipeIngredients->removeElement($recipeIngredient);
         }
 
         return $this;

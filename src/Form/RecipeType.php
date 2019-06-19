@@ -103,10 +103,11 @@ class RecipeType extends AbstractType
             CollectionType::class,
             [
                 'entry_type' => RecipeIngredientType::class,
+                'label'=> false,
                 'allow_add' => true,
                 'by_reference' => false,
                 'allow_delete' => true,
-                'mapped' => false,
+                'required' => true,
             ]
         );
 
@@ -124,13 +125,14 @@ class RecipeType extends AbstractType
             $this->tagsDataTransformer
         );
 
+       // $builder->addEventSubscriber(new RecipeIngredientEventSubscriber());
+
         $builder->get('RecipeIngredients')->addModelTransformer(
             $this->ingredientDataTransformer
         );
 
         $builder->addEventSubscriber(new DefaultPhotoFileEventSubscriber());
 
-        $builder->addEventSubscriber(new RecipeIngredientEventSubscriber());
 
 
 

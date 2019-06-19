@@ -54,7 +54,7 @@ class IngredientDataTransformer implements DataTransformerInterface
             $ingredientNames[] = $ingredient->getName();
             }
 
-        return $ingredient->getName();
+        return $ingredients;
     }
 
 
@@ -75,38 +75,43 @@ class IngredientDataTransformer implements DataTransformerInterface
 //        die();
 //        $ingredientNames = explode(',', $value);
 //        dump($ingredientNames);
-//
-//        $ingredients = [];
-//
+
+        $ingredientsData = [];
         foreach ($value as $collection) {
-
-
             if ('' !== $collection) {
 
                 $ingredients = $collection->getIngredient($collection);
                 $ingredientName = $ingredients->getName($ingredients);
-                $ingredient = $this->ingredientRepository->findOneByName(strtolower($ingredientName));
-                if (null == $ingredient) {
-                    $ingredientNew = new Ingredient(1);
-                    $ingredientNew->setName($ingredientName);
-                    $this->ingredientRepository->save($ingredientNew);
-            //        $ingredientId = $ingredientNew->getId();
-            //        dump($ingredientId);
-                }
-
+                $ingredient = $this->repository->findOneByIngredient(strtolower($ingredientName));
+                dump($ingredient);
                 $amount = $collection->getAmount($collection);
                 $recipeIngredient = $this->repository->findOneByAmount(strtolower($amount));
+                if (null == $ingredient && null == $recipeIngredient) {
+                    $ingredientNew = new Ingredient(1);
+                    $ingredientNew->setName($ingredientName);
+                   // $this->ingredientRepository->save($ingredientNew);
+                   // $ingredientId = $ingredientNew->getId();
 
+                    $recipeIngredientNew = new RecipeIngredient(1);
+                    $recipeIngredientNew->setAmount($amount);
+                    $recipeIngredientNew->setIngredient($ingredientNew);
+                    //$this->repository->save($recipeIngredientNew);
+
+                    $ingredientsData[] = $recipeIngredientNew;
+                }
+
+
+/*
                 if (null == $recipeIngredient) {
                     $recipeIngredientNew = new RecipeIngredient(1);
                     $recipeIngredientNew->setAmount($amount);
-                    $this->repository->save($recipeIngredientNew);
-                }
+                    //$this->repository->save($recipeIngredientNew);
 
-                $ingredientsData[] = $ingredients;
+                }
+*/
             }
         }
-
+        dump($ingredientsData);
         return $ingredientsData;
     }
 }

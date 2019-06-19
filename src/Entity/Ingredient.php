@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 
 /**
@@ -22,6 +24,13 @@ class Ingredient
 
     /**
      * @ORM\Column(type="string", length=45)
+     *
+     *
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *     min="3",
+     *     max="45",
+     * )
      */
     private $name;
 
@@ -37,7 +46,10 @@ class Ingredient
      *
      * @Gedmo\Slug(fields={"name"})
      *
-     *
+     * @Assert\Length(
+     *     min="3",
+     *     max="45",
+     * )
      */
     private $code;
 
