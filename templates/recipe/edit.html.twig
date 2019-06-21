@@ -16,8 +16,6 @@
         {% for RecipeIngredient in form.RecipeIngredients %}
                 <li>
                     {{ form_row(RecipeIngredient.amount) }}
-                </li>
-                <li>
                     {{ form_row(RecipeIngredient.Ingredient) }}
                 </li>
         {% endfor %}

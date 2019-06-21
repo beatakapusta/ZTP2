@@ -5,6 +5,8 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 
 
@@ -57,6 +59,21 @@ class Ingredient
      * @ORM\OneToMany(targetEntity="App\Entity\RecipeIngredient", mappedBy="ingredient", cascade={"persist"})
      */
     private $ingredientRecipe;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Unit", inversedBy="ingredients")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $unit;
+
+    /**
+     * Ingredient constructor.
+     */
+    public function __construct()
+    {
+        $this->ingredientRecipe = new ArrayCollection();
+    }
+
 
     /**
      * @return int|null
@@ -144,5 +161,17 @@ class Ingredient
     public function __toString()
     {
         return $this->getName();
+    }
+
+    public function getUnit(): ?Unit
+    {
+        return $this->unit;
+    }
+
+    public function setUnit(?Unit $unit): self
+    {
+        $this->unit = $unit;
+
+        return $this;
     }
 }

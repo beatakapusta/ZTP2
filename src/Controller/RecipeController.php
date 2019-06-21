@@ -5,8 +5,10 @@
 namespace App\Controller;
 use App\Entity\Recipe;
 use App\Entity\Photo;
+use App\Entity\RecipeIngredient;
 use App\Form\RecipeType;
 use App\Repository\PhotoRepository;
+use App\Repository\RecipeIngredientRepository;
 use App\Repository\RecipeRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -75,6 +77,9 @@ class RecipeController extends AbstractController
      * @param \Symfony\Component\HttpFoundation\Request $request    HTTP request
      * @param \App\Repository\RecipeRepository        $repository Recipe repository
      *
+     * @param \App\Repository\RecipeIngredientRepository        $recipeIngredientRepository repository RecipeIngredient repository
+
+     *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      *
      * @throws \Doctrine\ORM\ORMException
@@ -86,20 +91,36 @@ class RecipeController extends AbstractController
      *     name="recipe_new",
      * )
      */
-    public function new(Request $request, RecipeRepository $repository): Response
+    public function new(Request $request, RecipeRepository $repository, RecipeIngredientRepository $recipeIngredientRepository): Response
     {
         $recipe = new Recipe();
         $form = $this->createForm(RecipeType::class, $recipe);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            dump($recipe);
 
             $photo = $recipe->getPhoto();
-            $photo->setRecipe($recipe);
+          //  $photo->setRecipe($recipe);
 
             $recipeIngredients = $recipe->getRecipeIngredients();
+            $recipeNew = new Recipe();
+            $recipeName = $recipe->getName();
+            $recipeText = $recipe->getText();
+            $recipeTags = $recipe->getTags();
+            $recipeNew->setName($recipeName);
+            $recipeNew->setText($recipeText);
+            $photo->setRecipe($recipeNew);
+            foreach($recipeTags as $recipeTag){
+                $recipeNew->addTag($recipeTag);
+            }
 
-            $repository->save($recipe);
+            $repository->save($recipeNew);
+
+            $recipeNew->getId();
+
+            foreach ($recipeIngredients as $recipeIngredient){
+                $recipeIngredient->setRecipe($recipeNew);
+                $recipeIngredientRepository->save($recipeIngredient);
+            }
 
             return $this->redirectToRoute('recipe_index');
         }
@@ -127,17 +148,20 @@ class RecipeController extends AbstractController
      *     name="recipe_edit",
      * )
      */
-    public function edit(Request $request, Recipe $recipe, RecipeRepository $repository, Filesystem $filesystem): Response
+    public function edit(Request $request, Recipe $recipe, RecipeRepository $repository, Filesystem $filesystem, RecipeIngredientRepository $recipeIngredientRepository): Response
     {
 
         $photo = $recipe->getPhoto();
+
+        $recipeIngredientsOld = $recipe->getRecipeIngredients();
+
+        $originalRecipeIngredients = clone $recipeIngredientsOld;
 
         $originalPhoto = clone $photo;
 
         $form = $this->createForm(RecipeType::class, $recipe, ['method' => 'PUT']);
 
         $form->handleRequest($request);
-
 
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -147,7 +171,21 @@ class RecipeController extends AbstractController
                 $file = $originalPhoto->getPhoto();
                 $filesystem->remove($file->getPathname());
             }
+            $recipeId =$recipe->getId();
 
+
+            $recipeIngredientNew = new RecipeIngredient();
+            $recipeIngredientNew = $formData->getRecipeIngredients();
+
+            foreach ($originalRecipeIngredients as $recipeIngredient){
+                $recipeIngredientRepository->delete($recipeIngredient);
+            }
+
+            foreach ($recipeIngredientNew as $recipeIngredient){
+                $recipeIngredient->setRecipe($recipe);
+                $recipeIngredientRepository->save($recipeIngredient);
+            }
+            // $this->repository->save($recipeIngredientNew);
             $repository->save($recipe);
 
             $this->addFlash('success', 'message.updated_successfully');

@@ -66,7 +66,7 @@ class Recipe
     private $tags;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\RecipeIngredient", mappedBy="recipe", fetch="EXTRA_LAZY", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\RecipeIngredient", mappedBy="recipe", cascade={"persist"})
      */
     private $recipeIngredients;
 

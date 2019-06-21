@@ -10,6 +10,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 
+
 /**
  * Class Photo.
  *
@@ -57,6 +58,25 @@ class Photo implements \Serializable
      * )
      */
     private $photo;
+
+    /**
+     * Code.
+     *
+     * @var string
+     *
+     * @ORM\Column(
+     *     type="string",
+     *     length=191,
+     * )
+     *
+     * @Gedmo\Slug(fields={"photo"})
+     *
+     * @Assert\Length(
+     *     min="3",
+     *     max="191",
+     * )
+     */
+    private $code;
 
     /**
      * @ORM\OneToOne(
